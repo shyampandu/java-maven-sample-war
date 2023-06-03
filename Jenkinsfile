@@ -5,31 +5,37 @@ pipeline {
         stage('Hello') {
             steps {
                 echo 'Hello World'
-		cleanWs()
-				
             }
         }
-		stage('Checkout code') {
+		stage('code checkout') {
             steps {
-                git 'https://github.com/shyampandu/java-maven-sample-war.git'
-            }
+			      cleanWs()
+                  checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/shyampandu/java-maven-sample-war.git']])         
+							
+				}
         }
-		stage('clean') {
+		stage('clean the project') {
             steps {
                 sh 'mvn clean'
             }
         }
-        stage('compile') {
+		stage('compile the project') {
             steps {
                 sh 'mvn compile'
             }
         }
-		stage('package') {
+		stage('build and package the project') {
             steps {
-                sh 'mvn package'
+                sh 'mvn test package'
+                build 'developmaven'
+            }
+        }
+		
+		stage('build and package the project') {
+            steps {
+                sh 'mvn test package'
+                build 'developmaven'
             }
         }
     }
-	
 }
-
