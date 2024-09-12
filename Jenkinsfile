@@ -7,30 +7,21 @@ pipeline {
                 echo 'Hello World'
             }
         }
-		stage('code checkout') {
+        stage('checkout') {
             steps {
-			      cleanWs()
-                  checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/shyampandu/java-maven-sample-war.git']])         
-							
-				}
-        }
-		stage('clean the project') {
-            steps {
-                sh 'mvn clean'
+               checkout scmGit(branches: [[name: '*/master']], extensions: [], userRemoteConfigs: [[url: 'https://github.com/shyampandu/java-maven-sample-war.git']])
             }
         }
-		stage('compile the project') {
+         stage('clean and compile') {
             steps {
-                sh 'mvn compile'
+              sh 'mvn clean install compile'
             }
         }
-		stage('build and package the project') {
+		stage('package') {
             steps {
-                sh 'mvn test package'
-               
+              sh 'mvn package'
             }
         }
-		
 		
     }
 }
